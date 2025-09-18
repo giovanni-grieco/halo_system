@@ -85,9 +85,12 @@ fnc_halo_launch = {
     // Load players
     {
         if (alive _x) then {
-            removeBackpack _x;
-            _x addBackpack "B_Parachute";
-            _x moveInCargo _plane;
+            // Give parachute on the player’s machine
+            [_x] remoteExec ["removeBackpack", _x]; // optional clear
+            [_x, "B_Parachute"] remoteExec ["addBackpack", _x];
+
+            // Move the player into cargo on their machine
+            [_x, _plane] remoteExec ["moveInCargo", _x];
         };
     } forEach halo_players;
 
@@ -98,7 +101,7 @@ fnc_halo_launch = {
     private _wp = _grp addWaypoint [_destPos, 0];
     _wp setWaypointType "MOVE";
     _wp setWaypointBehaviour "CARELESS";
-    _wp setWaypointSpeed "LIMITED";
+    _wp setWaypointSpeed "NORMAL";
 
     // Reset
     halo_players = [];
